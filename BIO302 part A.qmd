@@ -19,6 +19,7 @@ library(usethis)
 use_git_config(   user.name = "liemdominic",    
                   user.email = "lje006@uib.no"   ) 
 usethis::create_github_token() 
+gitcreds::gitcreds_set()
 usethis::use_git()
 ```
 
