@@ -1,9 +1,9 @@
 ---
-title: "BIO302 exam Part A"
+title: "BIO302 exam"
 author: "Liem Oeastraadt-Jennings"
 format: html
 editor: visual
-date: 29.06.2023
+date: today
 ---
 
 ## Part A - reproducibility
@@ -17,13 +17,7 @@ library(ggplot2)
 library(tidyverse) 
 library(readr) 
 library(here) 
-library(usethis) 
-use_git_config(   user.name = "liemdominic",    
-                  user.email = "lje006@uib.no"   ) 
-usethis::create_github_token() 
-usethis::use_git()
-git_vaccinate()
-use_github()
+library(usethis)
 ```
 
 ```{r}
