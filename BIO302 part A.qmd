@@ -1,5 +1,5 @@
 ---
-title: "BIO302 exam"
+title: "BIO302 exam Part A"
 author: "Liem Oeastraadt-Jennings"
 format: html
 editor: visual
@@ -52,20 +52,11 @@ I tried to reproduce figure 2c) from the paper Cook et al., 2022. Looking at the
 
 The colour and legend are not the same as in the article figure, but those are reproducible with known choice of colour and legend location coordinates. I did not use unneccessary time trying to reproduce these.
 
-Reproducing the figure went well, but understanding how the data cleaning process was done was not possible (Cook et al., 2022). Understanding the whole figure by itself is not possible, other than understanding that there is a visual difference between mean coral coverage at the times surveyed. Visual surveys by SCUBA diving was the method used and mean percentage coverage across the site-specific quadrants was calculated using scleractinian coral quadrat data. To reproduce the figure completely i would need the coordinates for the offset of legend and the colour scheme they chose. In the data coral_cover.csv, data points are from year 1976 and 2018, but in the figure (Cook et al., 2022), the year's in the legend say 1975 and 2018. Figure text explains that the visual survey was done in the years 1975-1976 and 2018. Why the legend shows only year 1975 i do not know, as the data shows only year 1976 and 2018. An explenation of this would leave less uncertainty to what this means.
+Reproducing the figure went well, but understanding how the data cleaning process was done was not possible (Cook et al., 2022). Understanding the whole figure by itself is not possible, other than understanding that there is a visual difference between mean coral coverage at the times surveyed. Visual surveys by SCUBA diving was the method used and mean percentage coverage across the site-specific quadrants was calculated using scleractinian coral quadrat data. To reproduce the figure completely i would need the coordinates for the offset of legend and the colour scheme they chose. In the data coral_cover.csv, data points are from year 1976 and 2018, but in the figure 2c (Cook et al., 2022), the year's in the legend says: 1975 and 2018. Figure text explains that the visual survey was done in the years 1975-1976 and 2018. Why the legend shows only year 1975 i do not know, as the data shows only year 1976 and 2018. An explenation of this would leave less uncertainty to what this means.
 
 16 data points for 1976 and 16 data points for 2018 were available in the coral_cover.csv file. Data was represented in year, site and mean coral coverage (%). I used janitor::clean_names to format the data column names. I used "here" to create a pathway that does not need Rstudio and creates a file path that locates the file from any other project root. I have commented the steps in my code so that my code is hopefully understandable by others.
 
 Not sure how to cite the data.
-
--   Make at least two commits to git.
-
--   Cite the original paper and data.
-
--   Make your reproduction as reproducible as possible (i.e. it should be possible for me to reproduce your work after cloning your repo and downloading the data).
-
-2.  Discuss how well you managed to reproduce the part of paper you were working on and what challenges you faced. If you looked at two papers discuss both.
-3.  Discuss what how well the original paper meets best practice for reproducibility, i.e. what should the authors have done to make their analysis more reproducible, and what they did well.
 
 Sources:
 
