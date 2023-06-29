@@ -10,6 +10,8 @@ date: 29.06.2023
 
 1.  Continue with your attempt to reproduce part of a paper from archived data from the first practical. Archive the code and text on GitHub and include the link to your repo in your answer here.
 
+    Link to repo: https://github.com/liemdominic/BIO302-exam/blob/main/BIO302%20part%20A.qmd
+
 ```{r}
 library(ggplot2) 
 library(tidyverse) 
