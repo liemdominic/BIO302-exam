@@ -4,6 +4,8 @@ author: "Liem Oeastraadt-Jennings"
 format: html
 editor: visual
 date: today
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Part A - reproducibility
@@ -13,6 +15,7 @@ date: today
     Link to repo: https://github.com/liemdominic/BIO302-exam/blob/main/BIO302%20part%20A.qmd
 
 ```{r}
+# Loading required packages
 library(ggplot2) 
 library(tidyverse) 
 library(readr) 
@@ -66,6 +69,93 @@ lm(growth \~ treatment, data = fish_data)
 -   What is wrong with this plan?
 -   Show, by simulation, the problems with this model for these data.
 -   Suggest a better model and show that it performs better.
+
+```{r}
+library(ggfortify) # Package needed to run ANOVA tests
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Number of tanks and fish per tank
+num_tanks_per_treatment <- 5
+fish_per_tank <- 10
+
+# Generate treatment labels
+Treatment <- rep(c("A", "B"), each = num_tanks_per_treatment * fish_per_tank)
+
+# Generate tank labels
+tank <- rep(1:num_tanks_per_treatment, each = fish_per_tank, times = length(Treatment) / (num_tanks_per_treatment * fish_per_tank))
+
+# Simulate random fish growth with varying treatment effects
+fish_growth <- rnorm(length(Treatment), mean = ifelse(Treatment == "A", 10, 12), sd = 2)
+
+# Create a data frame
+fish_data <- data.frame(Treatment, tank, fish_growth) |>
+  janitor::clean_names()
+
+# Checking the lm model
+model <- lm(fish_growth ~ Treatment, data = fish_data)
+
+# Print the coefficient estimates
+summary(model)$coefficients
+
+# Linear model summary
+summary(model)
+
+# Package needed to run mixed effect
+library(lme4)
+
+# Fit a mixed-effects model
+mixed_model <- lmer(fish_growth ~ treatment + (1 | tank), data = fish_data)
+
+# Print the mixed model summary
+summary(mixed_model)
+
+#Running ANOVA tests and autoplot to check goodness of fit
+anova(model)
+
+anova(mixed_model)
+
+# Compare model summaries
+print(summary(model))
+print(summary(mixed_model))
+
+# Plot observed vs. predicted values for both models
+lm_model_plot <- ggplot(fish_data, aes(x = fish_growth, y = fitted(model))) +
+  geom_point(color = "blue") +
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  labs(title = "Observed vs. Predicted (lm Model)")
+
+mixed_model_plot <- ggplot(fish_data, aes(x = fish_growth, y = fitted(mixed_model))) +
+  geom_point(color = "green") +
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  labs(title = "Observed vs. Predicted (Mixed-Effects Model)")
+
+# Combine the plots using facet_wrap
+library(gridExtra)
+grid.arrange(lm_model_plot, mixed_model_plot, ncol = 2)
+
+```
+
+## Answer Part B
+
+Assumptions of the linear model are:
+
+1.  That there is a linear relationship between the dependent variable (in this case fish growth) and the independent variable(s) (treatment).
+
+2.  That the residuals are normal distributed (have a mean of zero).
+
+3.  Has constant variance in residuals (not heteroscedastic).
+
+4.  Residuals are independent (uncorrelated).
+
+The planned model **`lm(growth ~ treatment, data = fish_data)`** assumes that each fish observation is independent of the others, which is not the case in this scenario. The data is structured hierarchically, with fish within tanks, and this violates the independence assumption required for the simple linear regression model (lm) to be valid. When observations are nested within higher-level units (e.g., fish within tanks), the data exhibits a hierarchical or clustered structure, and the standard lm model is not appropriate.
+
+Assumptions of the mixed effect model are mostly the same as the linear model, but with an additional random-effect. The random effect assumes that the intercept follows a normal distribution which in this case would be the effect of the tank, and that the effect is independent of the of the fixed effects. Random effects are included to account for the variability at different levels of grouping (such as the tanks in this case).
+
+To demonstrate the issues with the linear model, l have simulated data with hierarchical structure and then compared the performance of the simple linear regression model with a mixed-effects model that accounts for the tank-level variability.
+
+The comparison of model summaries and the observed vs. predicted plots will show that the simple linear regression model fails to account for the hierarchical structure and leads to biased estimates, whereas the mixed-effects model handles the clustering and provides more accurate predictions.
 
 2.  You review a paper with the following text.
 
