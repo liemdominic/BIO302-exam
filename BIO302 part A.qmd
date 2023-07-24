@@ -8,11 +8,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Part A - reproducibility
+# Part A - reproducibility
 
-1.  Continue with your attempt to reproduce part of a paper from archived data from the first practical. Archive the code and text on GitHub and include the link to your repo in your answer here.
+## 1. Continue with your attempt to reproduce part of a paper from archived data from the first practical. Archive the code and text on GitHub and include the link to your repo in your answer here.
 
-    Link to repo: https://github.com/liemdominic/BIO302-exam/blob/main/BIO302%20part%20A.qmd
+Link to repo: https://github.com/liemdominic/BIO302-exam/blob/main/BIO302%20part%20A.qmd
 
 ```{r}
 # Loading required packages
@@ -54,15 +54,13 @@ Reproducing the figure went well, but understanding how the data cleaning proces
 
 16 data points for 1976 and 16 data points for 2018 were available in the coral_cover.csv file. Data was represented in year, site and mean coral coverage (%). I used janitor::clean_names to format the data column names. I used "here" to create a pathway that does not need Rstudio and creates a file path that locates the file from any other project root. I have commented the steps in my code so that my code is hopefully understandable by others.
 
-Not sure how to cite the data.
-
 Sources:
 
 Cook, K.M. et al. (2022) "A community and functional comparison of coral and reef fish assemblages between four decades of coastal urbanisation and thermal stress," Ecology and evolution, 12(3), pp. e8736-n/a.
 
-## Part B data analysis
+# Part B data analysis
 
-1.  A colleague is testing the effect of a treatment on fish growth. They have ten tanks (five for each treatment). Each tank with ten fish. They plan to fit the model
+## 1. A colleague is testing the effect of a treatment on fish growth. They have ten tanks (five for each treatment). Each tank with ten fish. They plan to fit the model
 
 lm(growth \~ treatment, data = fish_data)
 
@@ -137,7 +135,7 @@ grid.arrange(lm_model_plot, mixed_model_plot, ncol = 2)
 
 ```
 
-## Answer Part B
+## Answer Part B, 1)
 
 Assumptions of the linear model are:
 
@@ -157,15 +155,59 @@ To demonstrate the issues with the linear model, l have simulated data with hier
 
 The comparison of model summaries and the observed vs. predicted plots will show that the simple linear regression model fails to account for the hierarchical structure and leads to biased estimates, whereas the mixed-effects model handles the clustering and provides more accurate predictions.
 
-2.  You review a paper with the following text.
+## 2. You review a paper with the following text.
 
 > "The effect size was small (r = 0.124). However artificially amplifying the sample by a factor of two (from n = 54 to n = 108) yielded a significant result (p = 0.043) suggesting that a future larger study might be able to detect a positive benefit for \[our treatment\]."
 
 What advice do you give the authors?
 
-3.  The `lynx` data (available with-in R) show the number of lynx (norsk: gaupe) trapped in Canada in 1821-1934. Plot the data then examine the acf and pacf for these data. What can you infer from these about the type of autocorrelation in these data?
+## Answer part B, 2)
 
-4.  Chironomid species richness has been recorded in some Norwegian lakes. Three predictor variables are available, water temperature, depth and pH. We want to test the hypothesis that species richness is related to temperature.
+Considering the effect size of r = 0.124, which gives an r\^2 = 0.0154, which means that observed variation is only explained by 1.5% of the dependent variable. The small magnitude of 0.124 indicates that the relationship between the variables is not very strong, and any changes in one variable are associated with only a small change in the other variable.
+
+While a small effect size might be considered weak in some contexts, it could still be meaningful or significant in others, depending on the research area and the practical implications of the findings.
+
+My advice for the author:
+
+1.  Address the small effect size: The author should acknowledge that the effect size from their study is small (r = 0.124). While statistically significant, small effect sizes might have limited practical significance. The author should discuss the potential clinical or real-world implications of such a small effect size and consider whether it would be meaningful to pursue further research on this topic.
+
+2.  Caution regarding artificially amplified sample size: The author should be cautious when interpreting the significant result obtained by artificially amplifying the sample size. While increasing the sample size can increase statistical power and the likelihood of detecting small effects, artificially inflating the data may not reflect the real-world scenarios accurately. The authors should discuss the implications of such an approach and the potential biases it may introduce.
+
+Replication in a larger study: Given the small effect size observed, the author's suggestion of conducting a larger study is reasonable. A larger sample size can provide more robust results and help establish the reliability of the effect. However, the author should also consider modifying their methodology to address any limitations or potential biases identified in the current study.
+
+## 3. The `lynx` data (available with-in R) show the number of lynx (norsk: gaupe) trapped in Canada in 1821-1934. Plot the data then examine the acf and pacf for these data. What can you infer from these about the type of autocorrelation in these data?
+
+## Answer part B, 3)
+
+```{r}
+data("lynx")
+
+plot(lynx, 
+     type = "l", 
+     xlab = "Year", 
+     ylab = "Number of Lynx", 
+     main = "Lynx Trapped in Canada (1821-1934)")
+
+# ACF plot
+
+acf(lynx, main = "ACF of Lynx Data")
+
+# PACF plot
+
+pacf(lynx, main = "PACF of Lynx Data")
+```
+
+Interpretation:
+
+\- ACF (Autocorrelation Function): The ACF plot shows the correlation of the lynx population at different lags (time intervals). If there is a significant autocorrelation at a specific lag, it suggests that the current observation is related to its past values at that lag. In the ACF plot, if there is a slow decay of correlations and it cuts off after a few lags, it indicates a possible AR (AutoRegressive) process.
+
+\- PACF (Partial Autocorrelation Function): The PACF plot shows the correlation between the lynx population at a specific lag and its values at all shorter lags removed. If there is a significant partial autocorrelation at a specific lag, it suggests a direct relationship between the current observation and its past values at that lag. In the PACF plot, if there is a sharp drop after a few lags, it indicates a possible MA (Moving Average) process.
+
+Based on the shapes and patterns observed in the ACF and PACF plots, you can infer the type of autocorrelation present in the lynx data. For instance, if you see significant spikes at certain lags in the ACF plot and a sharp drop after a few lags in the PACF plot, it could suggest an AR(p) process. If you see significant spikes in the PACF plot and a rapid decay in the ACF plot, it could indicate an MA(q) process. If both plots show significant spikes, it could indicate a combination of AR and MA processes, i.e., an ARMA(p,q) process.
+
+Remember that the presence of autocorrelation in time series data is essential for appropriate modeling and forecasting.
+
+## 4. Chironomid species richness has been recorded in some Norwegian lakes. Three predictor variables are available, water temperature, depth and pH. We want to test the hypothesis that species richness is related to temperature.
 
 The data are in the file chironomid.txt.
 
