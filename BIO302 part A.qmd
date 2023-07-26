@@ -10,7 +10,7 @@ editor_options:
 
 # Part A - reproducibility
 
-## 1. Continue with your attempt to reproduce part of a paper from archived data from the first practical. Archive the code and text on GitHub and include the link to your repo in your answer here.
+## Continue with your attempt to reproduce part of a paper from archived data from the first practical. Archive the code and text on GitHub and include the link to your repo in your answer here.
 
 Link to repo: https://github.com/liemdominic/BIO302-exam/blob/main/BIO302%20part%20A.qmd
 
@@ -199,13 +199,15 @@ pacf(lynx, main = "PACF of Lynx Data")
 
 Interpretation:
 
-\- ACF (Autocorrelation Function): The ACF plot shows the correlation of the lynx population at different lags (time intervals). If there is a significant autocorrelation at a specific lag, it suggests that the current observation is related to its past values at that lag. In the ACF plot, if there is a slow decay of correlations and it cuts off after a few lags, it indicates a possible AR (AutoRegressive) process.
+The ACF (Autocorrelation Function) plot of the lynx population shows the correlation at different lags (time intervals) between the current observation and its past values. Significant autocorrelation at specific lags indicates a relationship between the lynx population at those points in time. Moreover, the presence of significant values at multiple lags suggests a cyclic pattern in the data. This cyclic behavior implies that the lynx population experiences repeating up-and-down movements over time, possibly driven by natural cycles or fluctuations recurring at regular intervals.
 
-\- PACF (Partial Autocorrelation Function): The PACF plot shows the correlation between the lynx population at a specific lag and its values at all shorter lags removed. If there is a significant partial autocorrelation at a specific lag, it suggests a direct relationship between the current observation and its past values at that lag. In the PACF plot, if there is a sharp drop after a few lags, it indicates a possible MA (Moving Average) process.
+The PACF (Partial Autocorrelation Function) plot provides insights into the direct relationship between the lynx population at specific lags, with the influence of all shorter lags removed. A positive significant value at lag 1 in the PACF plot suggests a strong positive correlation between the current lynx population and its value at the previous time point. This indicates that the lynx population tends to be influenced by its immediate past value, indicating a possible AutoRegressive (AR) process of order 1 (AR(1)). Additionally, the positive significant value at lag 8 in the PACF plot suggests a seasonal behavior, meaning that the lynx population might be influenced by its value at the same time point but 8 periods (years) ago.
 
-Based on the shapes and patterns observed in the ACF and PACF plots, you can infer the type of autocorrelation present in the lynx data. For instance, if you see significant spikes at certain lags in the ACF plot and a sharp drop after a few lags in the PACF plot, it could suggest an AR(p) process. If you see significant spikes in the PACF plot and a rapid decay in the ACF plot, it could indicate an MA(q) process. If both plots show significant spikes, it could indicate a combination of AR and MA processes, i.e., an ARMA(p,q) process.
+On the other hand, the negative significant values at lags 2 and 4 in the PACF plot indicate a dampening effect on the autocorrelation at those lags, possibly due to the influence of seasonal behavior on the lynx population. This behavior results in decreased autocorrelation after those specific lags.
 
-Remember that the presence of autocorrelation in time series data is essential for appropriate modeling and forecasting.
+Taking both the ACF and PACF plots into account, it appears that the lynx data could be well-modeled by a seasonal AR(1) model or a seasonal ARIMA (SARIMA) model. SARIMA models are capable of capturing both autoregressive and seasonal components, making them suitable for capturing the cyclic and seasonal patterns observed in the lynx population data.
+
+While the ACF and PACF plots provide valuable information about the autocorrelation patterns in the data, they alone might not be sufficient to make definitive conclusions about the autocorrelation. The plots offer initial insights into potential patterns and dependencies within the time series, but further analysis and model diagnostics are typically required to draw robust conclusions.
 
 ## 4. Chironomid species richness has been recorded in some Norwegian lakes. Three predictor variables are available, water temperature, depth and pH. We want to test the hypothesis that species richness is related to temperature.
 
@@ -218,9 +220,3 @@ The data are in the file chironomid.txt.
 -   Predict species richness at -5, 5, and 30°C and show the 95% confidence intervals.
 -   Present the results using both graphs and tables.
 -   Write a biological interpretation of your model.
-
-## Instructions
-
-Write in a quarto document and submit the rendered version. Make sure that any figures are included in you submission.
-
-Upload your answer to mitt.uib
