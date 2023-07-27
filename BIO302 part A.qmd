@@ -92,13 +92,13 @@ fish_data <- data.frame(Treatment, tank, fish_growth) |>
   janitor::clean_names()
 
 # Checking the lm model
-model <- lm(fish_growth ~ Treatment, data = fish_data)
+model_lm <- lm(fish_growth ~ Treatment, data = fish_data)
 
 # Print the coefficient estimates
-summary(model)$coefficients
+summary(model_lm)$coefficients
 
 # Linear model summary
-summary(model)
+summary(model_lm)
 
 # Package needed to run mixed effect
 library(lme4)
@@ -110,16 +110,16 @@ mixed_model <- lmer(fish_growth ~ treatment + (1 | tank), data = fish_data)
 summary(mixed_model)
 
 #Running ANOVA tests and autoplot to check goodness of fit
-anova(model)
+anova(model_lm)
 
 anova(mixed_model)
 
 # Compare model summaries
-print(summary(model))
+print(summary(model_lm))
 print(summary(mixed_model))
 
 # Plot observed vs. predicted values for both models
-lm_model_plot <- ggplot(fish_data, aes(x = fish_growth, y = fitted(model))) +
+lm_model_plot <- ggplot(fish_data, aes(x = fish_growth, y = fitted(model_lm))) +
   geom_point(color = "blue") +
   geom_abline(intercept = 0, slope = 1, color = "red") +
   labs(title = "Observed vs. Predicted (lm Model)")
@@ -220,3 +220,77 @@ The data are in the file chironomid.txt.
 -   Predict species richness at -5, 5, and 30°C and show the 95% confidence intervals.
 -   Present the results using both graphs and tables.
 -   Write a biological interpretation of your model.
+
+## Answer part B, 4)
+
+```{r}
+# Load data
+data_chiro <- read.table("chironomid.txt", header = TRUE) |>
+  janitor::clean_names()
+
+# Check classes
+str(data_chiro)
+
+# Change class of no_species to numeric to make histogram
+data_chiro$no_species <- as.numeric(data_chiro$no_species)
+
+# Check for missing values
+sum(is.na(data_chiro$no_species))
+
+# Histogram to visualize the distribution
+hist(data_chiro$no_species, breaks = 25)  
+
+# Fit a Poisson regression model
+model_chiro <- glm(no_species ~ temperature, data = data_chiro, family = poisson)
+
+# Check model diagnostics
+summary(model_chiro)  # View model summary
+plot(model_chiro, which = 1)  # Check residuals vs. fitted values plot
+plot(model_chiro, which = 2)  # Check normal Q-Q plot of residuals
+
+# Predict species richness at specific temperature values
+new_data_chiro <- data.frame(temperature = c(-5, 5, 30))
+pred_chiro <- predict(model_chiro, newdata = new_data_chiro, type = "response", se.fit = TRUE)
+
+# Calculate 95% confidence intervals
+lower <- pred_chiro$fit - 1.96 * pred_chiro$se.fit
+upper <- pred_chiro$fit + 1.96 * pred_chiro$se.fit
+results <- cbind(new_data_chiro, PredictedSpeciesRichness = pred_chiro$fit, LowerCI = lower, UpperCI = upper)
+
+# Present results 
+print(results)
+
+# Change class back of "no_species" to integer for the geom_ribbon to work correctly
+data_chiro$no_species <- as.integer(data_chiro$no_species)
+
+# Graphical presentation
+plot_chiro_temp <- ggplot() +
+  geom_point(data = data_chiro, # Shows the data points
+             aes(x = temperature, 
+                 y = no_species), 
+                 color = "blue") +
+  geom_line(data = results, # Shows the predicted species richness with temperature
+            aes(x = temperature, 
+                y = PredictedSpeciesRichness), 
+                color = "red") +
+  geom_line(data = results, # Shows the lower CI - dashed lines
+            aes(x = temperature, 
+                y = LowerCI), 
+                color = "green", 
+                linetype = "dashed") +
+  geom_line(data = results, # Shows the upper CI - dashed lines
+            aes(x = temperature, 
+                y = UpperCI), 
+                color = "green", 
+                linetype = "dashed") +
+  labs(x = "Water Temperature (Celsius)", # Add labs
+       y = "Species Richness", 
+       title = "Predicted Species Richness with 95% CI") +
+  theme_minimal()
+
+plot_chiro_temp
+
+# Tabular presentation
+print(results)
+
+```
